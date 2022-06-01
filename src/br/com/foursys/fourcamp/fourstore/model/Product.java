@@ -160,7 +160,7 @@ public class Product {
 		return "\n\nsku: " + sku + "\nid: " + id + "\nDescricao: " + ((this.description == null) ? "" : this.description)
 				+ "\nTipo: " + type + "\nTamanho: " + size + "\nCor: " + color 
 				+ "\nCategoria: " + category + "\nEstação: " + season + "\nQuantidade: " + quantity
-				+ "\nPreço de compra: " + purchasePrice + "\nPreço de venda: " + salePrice + "\n\n";
+				+ "\nPreço de compra: R$" + purchasePrice + "\nPreço de venda: R$" + salePrice + "\n\n";
 	}
 
 

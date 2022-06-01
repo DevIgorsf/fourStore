@@ -12,8 +12,8 @@ import br.com.foursys.fourcamp.fourstore.service.SaleService;
 
 public class SaleController {
 	
-	private SaleService saleService = new SaleService();
-	private ClientService clientService = new ClientService();
+	private static SaleService saleService = new SaleService();
+	private static ClientService clientService = new ClientService();
 	
 	public String addCart(String sku, Integer quantity) {
 		if(saleService.addCart(sku, quantity)) {
@@ -36,7 +36,7 @@ public class SaleController {
 		Client client = clientService.findByCPF(cpf); //Cliente da compra
 		Double amountValue = this.amountValue(cart); //valor da compra
 		
-		Sale sale = new Sale(client, cart, amountValue, paymentmethod);
+		Sale sale = new Sale(client, cart.toString(), amountValue, paymentmethod);
 		
 		saleService.saveSale(sale);
 		
@@ -47,7 +47,7 @@ public class SaleController {
 		ArrayList<Product> cart = SaleService.getCart(); //lista de produtos da compra
 		Double amountValue = this.amountValue(cart); //valor da compra
 		
-		Sale sale = new Sale(cart, amountValue, paymentmethod);
+		Sale sale = new Sale(cart.toString(), amountValue, paymentmethod);
 		
 		saleService.saveSale(sale);
 		
@@ -62,6 +62,7 @@ public class SaleController {
 			return retorno;
 		}
 		retorno = saleService.listSale().toString();
+//		retorno = saleService.listSale();
 		return retorno;
 	}
 	
@@ -69,5 +70,9 @@ public class SaleController {
 		Double retorno = 0.0;
 		retorno = saleService.amountValue(products);
 		return retorno;
+	}
+
+	public String netSaleConsultation() {
+		return saleService.netSaleConsultation();
 	}
 }

@@ -1,29 +1,27 @@
 package br.com.foursys.fourcamp.fourstore.model;
 
-import java.util.List;
-
 import br.com.foursys.fourcamp.fourstore.enums.PaymentMethod;
 
 public class Sale {
 	
 	private Client client;
-	private  List<Product> products;
+	private String products;
 	private Double amountValue;
 	private PaymentMethod paymentMethod;
 	
-	public Sale(List<Product> products, Double amountValue, PaymentMethod paymentMethod) {
-		this.products = products;
+	public Sale(String string, Double amountValue, PaymentMethod paymentMethod) {
+		this.products = string;
 		this.amountValue = amountValue;
 		this.paymentMethod = paymentMethod;
 	}
 	
-	public Sale(Client client, List<Product> products, Double amountValue, PaymentMethod paymentMethod) {
+	public Sale(Client client, String products, Double amountValue, PaymentMethod paymentMethod) {
 		this.client = client;
 		this.products = products;
 		this.amountValue = amountValue;
 		this.paymentMethod = paymentMethod;
 	}
-
+	
 	public Client getClient() {
 		return client;
 	}
@@ -32,11 +30,11 @@ public class Sale {
 		this.client = client;
 	}
 
-	public List<Product> getProducts() {
+	public String getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
+	public void setProducts(String products) {
 		this.products = products;
 	}
 
@@ -61,13 +59,13 @@ public class Sale {
 		if(this.client != null) {
 			return "\n\nCliente: " +  client.getName() 
 			 + "\n\nChave pix: " +  client.getPixKey() 
-		     + "\nProdutos: " + products.toString()
-		     + "\nValor total: " + amountValue
+		     + "\nProdutos: " + products
+		     + "\nValor total: R$" + amountValue
 		     + "\nMétodo de pagamento: " + paymentMethod.getDescription() + "\n";
 		} else {
 			return "\nVenda para o cliente: cliente não informado"
-			 + "\nProdutos: " + products.toString()
-		     + "\nValor total: " + amountValue
+			 + "\nProdutos: " + products
+		     + "\nValor total: R$" + amountValue
 		     + "\nMétodo de pagamento: " + paymentMethod.getDescription() + "\n";
 		}
 		

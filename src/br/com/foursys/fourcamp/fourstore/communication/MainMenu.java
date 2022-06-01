@@ -65,7 +65,7 @@ public class MainMenu {
 		String entrada;
 
 		while (option != 0) {
-			System.out.println("1 - Realizar Venda" + "\n2 - Consultar o histórico de vendas" + "\n0 - Para voltar");
+			System.out.println("1 - Realizar Venda" + "\n2 - Consultar o histórico de vendas" + "\n3 - Receita líquida de vendas" + "\n0 - Para voltar");
 			entrada = scanner.next();
 
 			option = menuController.validationRegexMenu(entrada, "[0-6]");
@@ -80,6 +80,11 @@ public class MainMenu {
 			}
 			case 2: {
 				String result = saleController.saleConsultation();
+				System.out.println(result);
+				break;
+			}
+			case 3: {
+				String result = saleController.netSaleConsultation();
 				System.out.println(result);
 				break;
 			}
@@ -228,6 +233,7 @@ public class MainMenu {
 		} else {
 			System.out.println(saleController.saleRegister(paymentmethod)); 
 		}
+		
 
 	}
 		
@@ -429,10 +435,10 @@ public class MainMenu {
 		System.out.println("Insira a quantidade do produto");
 		Integer quantity = scanner.nextInt();
 		
-		System.out.println("Insira o valor de compra do produto");
+		System.out.println("Insira o valor de compra do produto \nR$");
 		Double purchasePrice = scanner.nextDouble();
 		
-		System.out.println("Insira o valor de venda do produto");
+		System.out.println("Insira o valor de venda do produto \nR$");
 		Double salePrice = scanner.nextDouble();
 		
 		String retorno = productController.cadProduct(sku, description, quantity, purchasePrice, salePrice);

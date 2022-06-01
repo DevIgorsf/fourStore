@@ -6,7 +6,6 @@ import br.com.foursys.fourcamp.fourstore.interfaces.DataInterfaces;
 import br.com.foursys.fourcamp.fourstore.model.Client;
 
 public class ClientData implements DataInterfaces<Client> {
-
 	private static ArrayList<Client> clientList = new ArrayList<Client>();
 
 	@Override
