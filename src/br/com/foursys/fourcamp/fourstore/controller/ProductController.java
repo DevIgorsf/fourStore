@@ -13,6 +13,14 @@ public class ProductController {
 		
 		String retorno = "";
 		
+		if(quantity < 0) {
+			return retorno = "Valor de quantidade não pode ser negativo";
+		} else if(purchasePrice < 0) {
+			return retorno = "Valor de quantidade não pode ser negativo";
+		} else if(salePrice < 0) {
+			return retorno = "Valor de quantidade não pode ser negativo";
+		}
+		
 		Product product = new Product(sku, description, quantity, purchasePrice, salePrice);
 		
 		if (product == null) {

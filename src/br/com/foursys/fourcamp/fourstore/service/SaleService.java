@@ -57,8 +57,8 @@ public class SaleService {
 
 	public String netSaleConsultation() {
 		Double netSale = saleData.getNetSales();
-		if(netSale == null) {
-			return "Não há vendas cadastradas";
+		if(netSale == 0.00) {
+			return "\nNão há vendas cadastradas. \n";
 		}
 		return "R$" + netSale;
 	}

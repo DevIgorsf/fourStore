@@ -1,5 +1,6 @@
 package br.com.foursys.fourcamp.fourstore.communication;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import br.com.foursys.fourcamp.fourstore.controller.ClientController;
@@ -99,38 +100,41 @@ public class MainMenu {
 		String sku;
 		Integer qtt = 0;
 		Integer option;
+		Integer thereIsProduct = 0;
 		saleController.clearCart();
 		
 		while(true) {
-			while(true) {
-				System.out.println("\nDigite o sku: ");
+			
+			try {
+				System.out.println("Digite o sku: ");
 				sku = scanner.next();
 				if (productController.getProductBySku(sku) == "Nao existe um produto com o sku " + sku) {
-					System.out.println("Produto nao existe");
+					System.out.println("Produto nao existe. \n");
+					break;
 				} else if(!(productController.validateSku(sku))) {
-					System.out.println("SKU inválido");
-				} else {
+					System.out.println("SKU inválido. \n");
 					break;
 				}
-			}
-			
-			while(true) {
+				
 				qtt = 0;
 				System.out.println("Digite a quantidade:");
 				qtt = scanner.nextInt();
 				if (qtt < 1) {
 					System.out.println("Digite 1 ou mais");
+					break;
 				} else if (!productController.haveStock(sku, qtt)) {
 					System.out.println("Quantidade maior do que possuimos" );
-					continue;
-				} else {
 					break;
-				}
-			}
-			ProductController.decrementProduct(sku, qtt);
+				} 
 				
-			
-			System.out.println(saleController.addCart(sku, qtt)); 
+				thereIsProduct++;
+				ProductController.decrementProduct(sku, qtt);
+				
+				System.out.println(saleController.addCart(sku, qtt)); 
+			} catch (InputMismatchException e) {
+	            System.out.println("\nUm dos campos foi preenchido incorretamente, produto não cadastrado.\n");
+	            scanner.next();
+	        }
 			
 			System.out.println("Deseja inserir outro produto?\n 1 - sim\n2 - nao");
 			option = scanner.nextInt();
@@ -144,97 +148,96 @@ public class MainMenu {
 			}	
 		}
 		
-
-		Integer resposta;
-		String cpf = null;
-		String nome;
-
-		while (true) {
-			System.out.println("deseja colocar o cpf? 1-sim ou 2-nao ?");
-			resposta = scanner.nextInt();
-			if (resposta == 1) {
-				while (true) {
-					System.out.println("digite o cpf: ");
-					cpf = scanner.next();
-					if(!menuController.validateCpfRegex(cpf)) {
-						System.out.println("O cpf deve ter o seguinte formato xxx.xxx.xxx-xx");
-					} else if (menuController.validarCpf(cpf)) {
-						System.out.println("Digite o nome do cliente");
-						nome = scanner.next();
-						clientController.registerClient(nome, cpf);
-						break;
-					} else {
-						System.out.println("CPF invalido");
+		if(thereIsProduct !=0) {
+			Integer resposta;
+			String cpf = null;
+			String nome;
+	
+			while (true) {
+				System.out.println("deseja colocar o cpf? 1-sim ou 2-nao ?");
+				resposta = scanner.nextInt();
+				if (resposta == 1) {
+					while (true) {
+						System.out.println("digite o cpf: ");
+						cpf = scanner.next();
+						if(!menuController.validateCpfRegex(cpf)) {
+							System.out.println("O cpf deve ter o seguinte formato xxx.xxx.xxx-xx");
+						} else if (menuController.validarCpf(cpf)) {
+							System.out.println("Digite o nome do cliente");
+							nome = scanner.next();
+							clientController.registerClient(nome, cpf);
+							break;
+						} else {
+							System.out.println("CPF invalido");
+						}
 					}
-				}
-				break;
-			} else if (resposta == 2) {
-				break;
-			} else {
-				System.out.println("digite uma resposta valida");
-			}
-		}
-		
-		
-		Integer opcao;
-		String dadosCartaoCredito;
-		String dadosCartaoDebito;
-		String chavePix;
-		PaymentMethod paymentmethod;
-		
-		while (true) {
-			System.out.println(
-					"Digite a forma de pagamento: \n1- cartao de credito \n2 -cartao de debito \n3- dinheiro \n4-pix");
-			opcao = scanner.nextInt();
-
-			switch (opcao) {
-			case 1:
-				paymentmethod = PaymentMethod.CARTAODECREDITO;
-				System.out.println("Digite o numero do Cartao");
-				dadosCartaoCredito = scanner.next();
-				scanner.nextLine();
-				if(!menuController.validationCard(dadosCartaoCredito)) {
-					System.out.println("Cartao Invalido");
-					continue;
-				}
-				break;
-			case 2:
-				paymentmethod = PaymentMethod.CARTAODEDEBITO;
-				dadosCartaoDebito = scanner.next();
-				if(!menuController.validationCard(dadosCartaoDebito)) {
-					System.out.println("Cartao Invalido");
-					continue;
-				}
-				break;
-			case 3:
-				paymentmethod = PaymentMethod.DINHEIRO;
-				break;
-			case 4:
-				paymentmethod = PaymentMethod.PIX;
-				System.out.println("Digite e chave pix");
-				chavePix = scanner.next();
-				if(cpf == null) {
-					clientController.registerPix(chavePix);
+					break;
+				} else if (resposta == 2) {
+					break;
 				} else {
-					clientController.registerPix(chavePix, cpf);
-
+					System.out.println("digite uma resposta valida");
+				}
+			}
+			
+			
+			Integer opcao;
+			String dadosCartaoCredito;
+			String dadosCartaoDebito;
+			String chavePix;
+			PaymentMethod paymentmethod;
+			
+			while (true) {
+				System.out.println(
+						"Digite a forma de pagamento: \n1- cartao de credito \n2 -cartao de debito \n3- dinheiro \n4-pix");
+				opcao = scanner.nextInt();
+	
+				switch (opcao) {
+				case 1:
+					paymentmethod = PaymentMethod.CARTAODECREDITO;
+					System.out.println("Digite o numero do Cartao");
+					dadosCartaoCredito = scanner.next();
+					scanner.nextLine();
+					if(!menuController.validationCard(dadosCartaoCredito)) {
+						System.out.println("Cartao Invalido");
+						continue;
+					}
+					break;
+				case 2:
+					paymentmethod = PaymentMethod.CARTAODEDEBITO;
+					dadosCartaoDebito = scanner.next();
+					if(!menuController.validationCard(dadosCartaoDebito)) {
+						System.out.println("Cartao Invalido");
+						continue;
+					}
+					break;
+				case 3:
+					paymentmethod = PaymentMethod.DINHEIRO;
+					break;
+				case 4:
+					paymentmethod = PaymentMethod.PIX;
+					System.out.println("Digite e chave pix");
+					chavePix = scanner.next();
+					if(cpf == null) {
+						clientController.registerPix(chavePix);
+					} else {
+						clientController.registerPix(chavePix, cpf);
+	
+					}
+					break;
+				default:
+					System.out.println("opcao invalida");
+					continue;
 				}
 				break;
-			default:
-				System.out.println("opcao invalida");
-				continue;
+	
 			}
-			break;
-
+							
+			if(cpf != null) {
+				System.out.println(saleController.saleRegister(paymentmethod, cpf)); 
+			} else {
+				System.out.println(saleController.saleRegister(paymentmethod)); 
+			}
 		}
-						
-		if(cpf != null) {
-			System.out.println(saleController.saleRegister(paymentmethod, cpf)); 
-		} else {
-			System.out.println(saleController.saleRegister(paymentmethod)); 
-		}
-		
-
 	}
 		
 		
@@ -297,35 +300,26 @@ public class MainMenu {
 	
 	private void updateProductById() {
 		String id;
-		while(true) {
-			System.out.print("\nInsira o id do produto: ");
-						
-			id = scanner.next();
-			String idIsValidMessage = productController.getProductById(id);
-			if(idIsValidMessage.equals("Nao existe um produto com o id " + id)) {
-				System.out.println(idIsValidMessage + ". Tente novamente.");
-				continue;
-			}
-			break;
+		System.out.print("\nInsira o id do produto: ");			
+		id = scanner.next();
+		String idIsValidMessage = productController.getProductById(id);
+		if(idIsValidMessage.equals("Nao existe um produto com o id " + id)) {
+			System.out.println(idIsValidMessage + "\n");
+		} else {
+			this.updateProduct(id, null);
 		}
-		
-		this.updateProduct(id, null);
 	}
 	
 	private void updateProductBySku() {
 		String sku;
-		while(true) {
-			System.out.print("\nInsira o sku do produto: ");
-			sku = scanner.next();
-			String skuIsValidMessage = productController.getProductBySku(sku);
-			if(skuIsValidMessage.equals("Nao existe um produto com o sku " + sku)) {
-				System.out.println(skuIsValidMessage + ". Tente novamente.");
-				continue;
-			}
-			break;
+		System.out.print("\nInsira o sku do produto: ");
+		sku = scanner.next();
+		String skuIsValidMessage = productController.getProductBySku(sku);
+		if(skuIsValidMessage.equals("Nao existe um produto com o sku " + sku)) {
+			System.out.println(skuIsValidMessage + "\n");
+		} else {
+			this.updateProduct(null, sku);
 		}
-		
-		this.updateProduct(null, sku);
 	}
 	
 	private void updateProduct(String id, String sku) {
@@ -416,33 +410,35 @@ public class MainMenu {
 	public void cadProduct() {
 		String sku;
 		
-		while (true) {
-			System.out.println("Insira o sku do produto");
-			sku = scanner.next();
-			if(productController.productIsRegistered(sku)) {
-				System.out.println("SKU já cadastrado. \n");
-			} else if(!(productController.validateSku(sku))) {
-				System.out.println("SKU inválido");
-			} else {
-				break;
-			}
+		System.out.println("Insira o sku do produto");
+		sku = scanner.next();
+		if (productController.productIsRegistered(sku)) {
+			System.out.println("SKU já cadastrado. \n");
+		} else if(!(productController.validateSku(sku))) {
+			System.out.println("SKU inválido. \n");
+		} else {
+			try {
+				System.out.println("Insira a descricao do produto");
+				scanner.nextLine();
+				String description = scanner.nextLine();
+				
+				System.out.println("Insira a quantidade do produto");
+				Integer quantity = scanner.nextInt();
+				
+				System.out.println("Insira o valor de compra do produto \nR$");
+				Double purchasePrice = scanner.nextDouble();
+				
+				System.out.println("Insira o valor de venda do produto \nR$");
+				Double salePrice = scanner.nextDouble();
+				
+				String retorno = productController.cadProduct(sku, description, quantity, purchasePrice, salePrice);
+				System.out.println(retorno);
+
+	        } catch (InputMismatchException e) {
+	            System.out.println("\nUm dos campos foi preenchido incorretamente, produto não cadastrado.\n");
+	            scanner.next();
+	        }
 		}
-		
-		System.out.println("Insira a descricao do produto");
-		scanner.nextLine();
-		String description = scanner.nextLine();
-		
-		System.out.println("Insira a quantidade do produto");
-		Integer quantity = scanner.nextInt();
-		
-		System.out.println("Insira o valor de compra do produto \nR$");
-		Double purchasePrice = scanner.nextDouble();
-		
-		System.out.println("Insira o valor de venda do produto \nR$");
-		Double salePrice = scanner.nextDouble();
-		
-		String retorno = productController.cadProduct(sku, description, quantity, purchasePrice, salePrice);
-		System.out.println(retorno);
 	}
 	
 	
@@ -456,7 +452,7 @@ public class MainMenu {
 		System.out.print("\nInsira o sku do produto: ");
 		String sku = scanner.next();
 		if(!(productController.validateSku(sku))) {
-			System.out.println("SKU inválido");
+			System.out.println("SKU inválido. \n");
 		} else {
 			System.out.println(productController.getProductBySku(sku) + "\n");
 		}
@@ -473,7 +469,7 @@ public class MainMenu {
 		System.out.print("\nInsira o sku do produto: ");
 		String sku = scanner.next();
 		if(!(productController.validateSku(sku))) {
-			System.out.println("SKU inválido");
+			System.out.println("SKU inválido. \n");
 		}else {
 			System.out.println(productController.deleteProductBySku(sku) + "\n");
 		}
