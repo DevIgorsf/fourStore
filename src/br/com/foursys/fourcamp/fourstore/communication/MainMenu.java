@@ -108,11 +108,11 @@ public class MainMenu {
 			try {
 				System.out.println("Digite o sku: ");
 				sku = scanner.next();
-				if (productController.getProductBySku(sku) == "Nao existe um produto com o sku " + sku) {
-					System.out.println("Produto nao existe. \n");
-					break;
-				} else if(!(productController.validateSku(sku))) {
+				if (!(productController.validateSku(sku))) {
 					System.out.println("SKU inválido. \n");
+					break;
+				} else if (productController.getProductBySku(sku) == "Nao existe um produto com o sku " + sku) {
+					System.out.println("Produto nao existe. \n");
 					break;
 				}
 				

@@ -37,8 +37,8 @@ public class ProductController {
 				+ "\n Categoria: " + product.getCategory()
 				+ "\n Estacao: " + product.getSeason()
 				+ "\n Quantidade: " + product.getQuantity()
-				+ "\n Preco de Compra: " + product.getPurchasePrice()
-				+ "\n Preco de Venda: " + product.getSalePrice() + "\n";
+				+ "\n Preco de Compra: R$" + product.getPurchasePrice()
+				+ "\n Preco de Venda: R$" + product.getSalePrice() + "\n";
 		productService.cadProduct(product);
 		
 		return retorno;
